@@ -308,6 +308,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dirt (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1228298146265561231, guid: 89ca68430b8a9784eaaa7c04b2554a75,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3554575538040859824, guid: 89ca68430b8a9784eaaa7c04b2554a75,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -316,7 +321,7 @@ PrefabInstance:
     - target: {fileID: 3554575538040859824, guid: 89ca68430b8a9784eaaa7c04b2554a75,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 1.251
       objectReference: {fileID: 0}
     - target: {fileID: 3554575538040859824, guid: 89ca68430b8a9784eaaa7c04b2554a75,
         type: 3}
