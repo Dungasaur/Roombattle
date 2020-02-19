@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7638319665939838540}
   - component: {fileID: 5268738479267707473}
   m_Layer: 0
-  m_Name: Circle.003
+  m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103,6 +103,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2619777019778973124}
   - component: {fileID: 14491250522230392}
+  - component: {fileID: 8208893534024608191}
   m_Layer: 0
   m_Name: Roomba
   m_TagString: Untagged
@@ -135,13 +136,28 @@ Rigidbody:
   m_GameObject: {fileID: 1297046078549315543}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 10
+  m_AngularDrag: 10
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!114 &8208893534024608191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297046078549315543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32f6030c17136044691f71d3b7a1de1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
+  rotationSpeed: 2
+  bumperCollider: {fileID: 0}
 --- !u!1 &3628542515883441605
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,7 +171,7 @@ GameObject:
   - component: {fileID: 4691326886547833203}
   - component: {fileID: 1245587139141061744}
   m_Layer: 0
-  m_Name: Circle.004
+  m_Name: Bumper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
