@@ -11,7 +11,7 @@ public class RoombaController : MonoBehaviour
 		Following
 	};
 	public State state;
-
+	
 	public float speed, rotationSpeed, dirtCheckRadius;
 	private Collider bumperCollider;
 	private bool coroutineIsRunning;
@@ -40,7 +40,6 @@ public class RoombaController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 
 	private void FixedUpdate()
@@ -81,7 +80,7 @@ public class RoombaController : MonoBehaviour
 					if (currentTarget != nearbyDirt[0].gameObject)
 					{
 						currentTarget = nearbyDirt[0].gameObject;
-						StartCoroutine("RotateDynamic", currentTarget.transform.position);
+						state = State.Following;
 					}
 				}
 				else
@@ -93,6 +92,38 @@ public class RoombaController : MonoBehaviour
 
 				break;
 			case State.Following:
+
+				if(!coroutineIsRunning)
+				{
+					//Check if front of roomba is within '5' degrees of facing the object dead on. If it is, move forward.
+					// if it isn't, Rotate toward target.
+					if (currentTarget == null)
+					{
+						state = State.Moving;
+					}
+					else
+					{
+						Vector3 heading = currentTarget.transform.position - transform.position;
+						float currentAngle = Vector3.SignedAngle(transform.forward,(transform.position - currentTarget.transform.position), transform.up);
+						Debug.Log(currentAngle);
+						if(currentAngle> 20f)
+						{
+							//Rotate Right
+							transform.Rotate(Vector3.up * -rotationSpeed);
+						}
+						else if(currentAngle<-20f)
+						{
+							//Roate Left
+							transform.Rotate(Vector3.up * rotationSpeed);
+						}
+						else
+						{
+							transform.Translate(Vector3.forward * speed * Time.deltaTime);
+						}
+					}
+				}
+				
+
 				break;
 			default:
 				break;
@@ -117,13 +148,13 @@ public class RoombaController : MonoBehaviour
 		state = State.Moving;
 	}
 
-	IEnumerator RotateDynamic(Vector3 position)
-	{
-		coroutineIsRunning = true;
-		yield return null;
-		//Vector3.RotateTowards()
-		coroutineIsRunning = false;
+	//IEnumerator RotateDynamic(Vector3 position)
+	//{
+	//	coroutineIsRunning = true;
+	//	float angle = Vector3.SignedAngle(transform.forward, (position - transform.position), Vector3.up);
+	//	//Vector3.RotateTowards()
+	//	coroutineIsRunning = false;
 
-	}
+	//}
 
 }
