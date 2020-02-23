@@ -34,7 +34,7 @@ public class RoombaController : MonoBehaviour
 	}
     void Start()
     {
-        
+		state = State.Moving;
     }
 
     // Update is called once per frame
@@ -103,23 +103,34 @@ public class RoombaController : MonoBehaviour
 					}
 					else
 					{
-						Vector3 heading = currentTarget.transform.position - transform.position;
-						float currentAngle = Vector3.SignedAngle(transform.forward,(transform.position - currentTarget.transform.position), transform.up);
-						Debug.Log(currentAngle);
-						if(currentAngle> 20f)
+						Vector3 heading = (new Vector3(currentTarget.transform.position.x, transform.position.y, currentTarget.transform.position.z) - transform.position).normalized;
+
+						//Debug.Log(currentAngle);at currentAngle = Vector3.SignedAngle(transform.forward,(transform.position - currentTarget.transform.position), transform.up);
+						//Debug.Log(currentAngle);
+
+						//if(transform.rotation != Quaternion.Euler(heading))
+						if (Vector3.Distance(transform.forward, heading) > .05f)
 						{
-							//Rotate Right
-							transform.Rotate(Vector3.up * -rotationSpeed);
-						}
-						else if(currentAngle<-20f)
-						{
-							//Roate Left
-							transform.Rotate(Vector3.up * rotationSpeed);
+							transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (heading), rotationSpeed * Time.deltaTime, 0), Vector3.up);
 						}
 						else
 						{
 							transform.Translate(Vector3.forward * speed * Time.deltaTime);
 						}
+						//if(currentAngle> 20f)
+						//{
+						//	//Rotate Right
+						//	transform.Rotate(Vector3.up * -rotationSpeed);
+						//}
+						//else if(currentAngle<-20f)
+						//{
+						//	//Roate Left
+						//	transform.Rotate(Vector3.up * rotationSpeed);
+						//}
+						//else
+						//{
+						//	
+						//}
 					}
 				}
 				
@@ -135,17 +146,19 @@ public class RoombaController : MonoBehaviour
 	{
 		if(collision.GetContact(0).thisCollider==bumperCollider)
 		{// Checking if hit collider is the front bumper. if it is, start rotating.
-			state = State.Rotating;
+			
 			StartCoroutine("RotateFixed");
 		}
 	}
 
 	IEnumerator RotateFixed()
 	{
+		State tempState = state;
+		state = State.Rotating;
 		currentTarget = null;
 		yield return new WaitForSeconds(1);
 		
-		state = State.Moving;
+		state =tempState;
 	}
 
 	//IEnumerator RotateDynamic(Vector3 position)
