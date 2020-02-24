@@ -13,15 +13,19 @@ public class RoombaController : MonoBehaviour
 	public State state;
 	
 	public float speed, rotationSpeed, dirtCheckRadius;
+
+	public int dirtCounter, playerNumber;
+
+	private float followingThreshhold;
 	private Collider bumperCollider;
-	private bool coroutineIsRunning;
+	private bool keepMoving;
 	private Rigidbody rb;
 	private LayerMask dirtLayer;
 	private GameObject currentTarget;
 
 	void Awake()
 	{
-		coroutineIsRunning = false;
+		keepMoving = false;
 		dirtLayer = LayerMask.GetMask("Dirt");
 		rb = GetComponent<Rigidbody>();
 		foreach(Collider c in GetComponentsInChildren<Collider>())
@@ -35,12 +39,12 @@ public class RoombaController : MonoBehaviour
     void Start()
     {
 		state = State.Moving;
+		dirtCounter = 5;
+		followingThreshhold = 1;
+		GameManager.instance.SetScore(dirtCounter, playerNumber);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
+
 
 	private void FixedUpdate()
 	{
@@ -48,57 +52,56 @@ public class RoombaController : MonoBehaviour
 		switch (state)
 		{
 			case State.Rotating:
-				if(!coroutineIsRunning)
-				{
+				
 					transform.Rotate(Vector3.up * rotationSpeed);
 
-				}
 				break;
 			case State.Moving:
-				Collider[] nearbyDirt = Physics.OverlapSphere(transform.position, dirtCheckRadius, dirtLayer, QueryTriggerInteraction.Collide);
-				if (nearbyDirt.Length > 1)
+				if (!keepMoving)
 				{
-					GameObject target = nearbyDirt[0].gameObject;
-					float distance = Vector3.Distance(transform.position, target.transform.position);
-					for (int i = 1; i < nearbyDirt.Length; i++)
+					Collider[] nearbyDirt = Physics.OverlapSphere(transform.position, dirtCheckRadius, dirtLayer, QueryTriggerInteraction.Collide);
+					if (nearbyDirt.Length > 1)
 					{
-						float tempDistance = Vector3.Distance(transform.position, nearbyDirt[i].transform.position);
-						if (tempDistance < distance)
+						GameObject target = nearbyDirt[0].gameObject;
+						float distance = Vector3.Distance(transform.position, target.transform.position);
+						for (int i = 1; i < nearbyDirt.Length; i++)
 						{
-							distance = tempDistance;
-							target = nearbyDirt[i].gameObject;
+							float tempDistance = Vector3.Distance(transform.position, nearbyDirt[i].transform.position);
+							if (tempDistance < distance)
+							{
+								distance = tempDistance;
+								target = nearbyDirt[i].gameObject;
+							}
+						}
+						if (currentTarget != target)
+						{
+							currentTarget = target;
+							state = State.Following;
 						}
 					}
-					if(currentTarget != target)
+					else if (nearbyDirt.Length == 1)
 					{
-						currentTarget = target;
-						StartCoroutine("RotateDynamic", currentTarget.transform.position);
+						if (currentTarget != nearbyDirt[0].gameObject)
+						{
+							currentTarget = nearbyDirt[0].gameObject;
+							state = State.Following;
+						}
+					}
+					else
+					{
+						currentTarget = null;
 					}
 				}
-				else if (nearbyDirt.Length == 1)
-				{
-					if (currentTarget != nearbyDirt[0].gameObject)
-					{
-						currentTarget = nearbyDirt[0].gameObject;
-						state = State.Following;
-					}
-				}
-				else
-				{
-					currentTarget = null;
-				}
-
 				transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
 				break;
 			case State.Following:
 
-				if(!coroutineIsRunning)
-				{
 					//Check if front of roomba is within '5' degrees of facing the object dead on. If it is, move forward.
 					// if it isn't, Rotate toward target.
-					if (currentTarget == null)
+					if (currentTarget == null || Vector3.Distance(transform.position, currentTarget.transform.position) < followingThreshhold || currentTarget.activeInHierarchy == false)
 					{
+						currentTarget = null;
 						state = State.Moving;
 					}
 					else
@@ -117,24 +120,7 @@ public class RoombaController : MonoBehaviour
 						{
 							transform.Translate(Vector3.forward * speed * Time.deltaTime);
 						}
-						//if(currentAngle> 20f)
-						//{
-						//	//Rotate Right
-						//	transform.Rotate(Vector3.up * -rotationSpeed);
-						//}
-						//else if(currentAngle<-20f)
-						//{
-						//	//Roate Left
-						//	transform.Rotate(Vector3.up * rotationSpeed);
-						//}
-						//else
-						//{
-						//	
-						//}
 					}
-				}
-				
-
 				break;
 			default:
 				break;
@@ -147,7 +133,17 @@ public class RoombaController : MonoBehaviour
 		if(collision.GetContact(0).thisCollider==bumperCollider)
 		{// Checking if hit collider is the front bumper. if it is, start rotating.
 			
-			StartCoroutine("RotateFixed");
+			StartCoroutine(RotateFixed());
+		}
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if(other.gameObject.layer == 8)
+		{
+			dirtCounter++;
+			GameManager.instance.ChangeScore(dirtCounter,playerNumber);
+			other.transform.root.gameObject.SetActive(false);
 		}
 	}
 
@@ -157,8 +153,18 @@ public class RoombaController : MonoBehaviour
 		state = State.Rotating;
 		currentTarget = null;
 		yield return new WaitForSeconds(1);
-		
-		state =tempState;
+
+		if (tempState != State.Rotating)
+			state = tempState;
+		else
+			state = State.Moving;
+	}
+
+	IEnumerator KeepMoving()
+	{
+		keepMoving = true;
+		yield return new WaitForSeconds(0.5f);
+		keepMoving = false;
 	}
 
 	//IEnumerator RotateDynamic(Vector3 position)
