@@ -25,6 +25,7 @@ public class RoombaController : MonoBehaviour
 
 	void Awake()
 	{
+		//Physics.IgnoreCollision(bumperCollider, bodycollider, true) ;
 		keepMoving = false;
 		dirtLayer = LayerMask.GetMask("Dirt");
 		rb = GetComponent<Rigidbody>();
@@ -96,7 +97,7 @@ public class RoombaController : MonoBehaviour
 
 				break;
 			case State.Following:
-
+				
 					//Check if front of roomba is within '5' degrees of facing the object dead on. If it is, move forward.
 					// if it isn't, Rotate toward target.
 					if (currentTarget == null || Vector3.Distance(transform.position, currentTarget.transform.position) < followingThreshhold || currentTarget.activeInHierarchy == false)
@@ -107,9 +108,6 @@ public class RoombaController : MonoBehaviour
 					else
 					{
 						Vector3 heading = (new Vector3(currentTarget.transform.position.x, transform.position.y, currentTarget.transform.position.z) - transform.position).normalized;
-
-						//Debug.Log(currentAngle);at currentAngle = Vector3.SignedAngle(transform.forward,(transform.position - currentTarget.transform.position), transform.up);
-						//Debug.Log(currentAngle);
 
 						//if(transform.rotation != Quaternion.Euler(heading))
 						if (Vector3.Distance(transform.forward, heading) > .05f)
@@ -125,14 +123,13 @@ public class RoombaController : MonoBehaviour
 			default:
 				break;
 		}
-		
 	}
 
 	void OnCollisionEnter(Collision collision)
 	{
 		if(collision.GetContact(0).thisCollider==bumperCollider)
 		{// Checking if hit collider is the front bumper. if it is, start rotating.
-			
+			//transform.Translate(transform.forward * (-speed) * Time.deltaTime);
 			StartCoroutine(RotateFixed());
 		}
 	}
