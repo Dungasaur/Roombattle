@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 
 	private int score1, score2, score3, score4;
     
-    void Start()
+    void Awake()
     {
         if(instance !=null)
 		{
