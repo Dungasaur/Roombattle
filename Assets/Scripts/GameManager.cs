@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 	public static GameManager instance;
 	// All 4 roombas
 	public GameObject roomba1, roomba2, roomba3, roomba4;
+	public GameObject cursor1, cursor2, cursor3, cursor4;
 	// related ui panels for roombas.
 	public Text scoreText1, scoreText2, scoreText3, scoreText4;
 
