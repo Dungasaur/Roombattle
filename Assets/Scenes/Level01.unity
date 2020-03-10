@@ -760,8 +760,8 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_Camera: {fileID: 963194227}
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -1185,6 +1185,10 @@ MonoBehaviour:
   roomba2: {fileID: 1643753041}
   roomba3: {fileID: 552529950}
   roomba4: {fileID: 1887645281}
+  cursor1: {fileID: 0}
+  cursor2: {fileID: 0}
+  cursor3: {fileID: 0}
+  cursor4: {fileID: 0}
   scoreText1: {fileID: 221598116}
   scoreText2: {fileID: 1243259113}
   scoreText3: {fileID: 2066898079}
@@ -2381,6 +2385,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 628873245}
     m_Modifications:
+    - target: {fileID: 8579895198797858279, guid: 55cf00ffd5874854f9e36c8c6246cd75,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8579895198797858279, guid: 55cf00ffd5874854f9e36c8c6246cd75,
+        type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8579895198797858282, guid: 55cf00ffd5874854f9e36c8c6246cd75,
         type: 3}
       propertyPath: m_Name
@@ -2493,3 +2507,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55cf00ffd5874854f9e36c8c6246cd75, type: 3}
+--- !u!1 &8579895199307882287 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8579895198797858282, guid: 55cf00ffd5874854f9e36c8c6246cd75,
+    type: 3}
+  m_PrefabInstance: {fileID: 8579895199307882286}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8579895199307882288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8579895199307882287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81f0422e640e8f14a8d3686fe55685ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fire1: 1Fire1
+  fire2: 1Fire2
+  fire3: 1Fire3
+  horizontal: Horizontal
+  vertical: Vertical
+  submit: Submit
+  cancel: Cancel
+  speed: 4
