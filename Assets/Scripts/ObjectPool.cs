@@ -5,18 +5,18 @@ using UnityEngine;
 public class ObjectPool : MonoBehaviour
 {
 	// Set GameObject to Pool in inspector (ie dirtPrefab in this case).
-	public static ObjectPool SharedInstance;
+	public static ObjectPool instance;
 	public List<GameObject> dirtPool;
 	public int poolAmount;
 	public GameObject dirtPrefab;
 	// Start is called before the first frame update
 	private void Awake()
 	{
-		if(SharedInstance !=null)
+		if(instance !=null)
 		{
 			Destroy(this);
 		}
-		SharedInstance = this;
+		instance = this;
 	}
 	void Start()
 	{

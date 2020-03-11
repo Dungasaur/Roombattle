@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Dirt
+  - Ground
+  - Knife
+  - Balloon
   layers:
   - Default
   - TransparentFX
@@ -15,7 +18,7 @@ TagManager:
   - 
   - 
   - Dirt
-  - 
+  - Accessories
   - 
   - 
   - 

@@ -10,10 +10,11 @@ public class PlayerInput : MonoBehaviour
 	public float speed;
 	public float relativeSpeed;
 	private RectTransform rectTransform;
+	RaycastHit hit;
 
 	private void Awake()
 	{
-		rectTransform = GetComponent<RectTransform>();
+		rectTransform = GetComponentInChildren<RectTransform>();
 		
 	}
 
@@ -33,7 +34,7 @@ public class PlayerInput : MonoBehaviour
 		{
 			//do cancel
 		}
-		if(Input.GetButton(fire1))
+		if(Input.GetButtonDown(fire1))
 		{
 			Fire1();
 		}
@@ -64,7 +65,6 @@ public class PlayerInput : MonoBehaviour
 		Vector2 position = rectTransform.anchoredPosition;
 
 		rectTransform.Translate(new Vector3(hValue * relativeSpeed,vValue * relativeSpeed, 0));
-		Debug.Log(rectTransform.position);
 		if(rectTransform.position.y>Screen.height)
 		{
 			rectTransform.position = new Vector2(rectTransform.position.x, Screen.height);
@@ -85,15 +85,18 @@ public class PlayerInput : MonoBehaviour
 	}
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
-		speed /= 3f;
+		relativeSpeed /= 3f;
+		Debug.Log("Collided");
 	}
 	private void OnCollisionExit2D(Collision2D collision)
 	{
-		speed *= 3f;
+		relativeSpeed *= 3f;
+		Debug.Log("Exited");
 	}
 	void Fire1()
 	{
-
+		Debug.Log("Fire1");
+		PlaceDirt();
 	}
 
 	void Fire2()
@@ -111,6 +114,36 @@ public class PlayerInput : MonoBehaviour
 		// current speed is based off 1024*768 resolution. Get ratio of current screen size and adjust speed to match ratio.
 		relativeSpeed = Screen.width / (speed * 115);
 
+	}
+
+	void PlaceDirt()
+	{
+		if(CastDown())
+		{
+			if(hit.collider.gameObject.tag=="Ground")
+			{
+				GameObject dirt = ObjectPool.instance.GetDirt();
+				dirt.SetActive(true);
+				dirt.transform.position = hit.point;
+
+			}
+		}
+	}
+
+	bool CastDown()
+	{
+		bool hitSomething = false;
+		Ray ray =Camera.main.ViewportPointToRay(new Vector3(rectTransform.position.x / Screen.width, rectTransform.position.y / Screen.height));
+		if (Physics.Raycast(ray,out hit))
+		{
+			Debug.Log(hit.collider.gameObject.name);
+			hitSomething = true;
+		}
+		else
+		{
+			Debug.Log("Missed");
+		}
+		return hitSomething;
 	}
 
 }
