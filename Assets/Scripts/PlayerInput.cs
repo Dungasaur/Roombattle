@@ -8,16 +8,24 @@ public class PlayerInput : MonoBehaviour
 	public string fire1, fire2, fire3, horizontal, vertical, submit, cancel;
 	float hValue, vValue;
 	public float speed;
-	private float relativeSpeed;
+	public float relativeSpeed;
 	private RectTransform rectTransform;
 
 	private void Awake()
 	{
 		rectTransform = GetComponent<RectTransform>();
+		
+	}
+
+	private void Start()
+	{
+		SetRelativeSpeed();
 	}
 	private void Update()
 	{
-		if(Input.GetButton(submit))
+
+		
+		if (Input.GetButton(submit))
 		{
 			//do submit
 		}
@@ -42,8 +50,47 @@ public class PlayerInput : MonoBehaviour
 		vValue = Input.GetAxis(vertical);
 	}
 
+	private void FixedUpdate()
+	{
+		
+		//SetRelativeSpeed();
+		//var y = Screen.Height - Screen.Height / 2;      // 50% 
+		//var y = Screen.Height - Screen.Height / 10;    // 10% 
+		//var y = Screen.Height - Screen.Height / 5;      // 20% 
+		//var y = Screen.Height - Screen.Height / 3;      // 33% 
 
-	
+		// Set a speed relative to a 1920x1080 screen. Get screen size and area. howmuch bigger the screen is than 100x100, multiply speed by that ratio to get the conistent speed.
+
+		Vector2 position = rectTransform.anchoredPosition;
+
+		rectTransform.Translate(new Vector3(hValue * relativeSpeed,vValue * relativeSpeed, 0));
+		Debug.Log(rectTransform.position);
+		if(rectTransform.position.y>Screen.height)
+		{
+			rectTransform.position = new Vector2(rectTransform.position.x, Screen.height);
+		}
+		else if(rectTransform.position.y < 0)
+		{
+			rectTransform.position = new Vector2(rectTransform.position.x, 0);
+		}
+
+		if(rectTransform.position.x>Screen.width)
+		{
+			rectTransform.position = new Vector2(Screen.width, rectTransform.position.y);
+		}
+		else if (rectTransform.position.x < 0)
+		{
+			rectTransform.position = new Vector2(0, rectTransform.position.y);
+		}
+	}
+	private void OnCollisionEnter2D(Collision2D collision)
+	{
+		speed /= 3f;
+	}
+	private void OnCollisionExit2D(Collision2D collision)
+	{
+		speed *= 3f;
+	}
 	void Fire1()
 	{
 
@@ -58,29 +105,12 @@ public class PlayerInput : MonoBehaviour
 	{
 
 	}
-
-	private void FixedUpdate()
+	
+	void SetRelativeSpeed()
 	{
+		// current speed is based off 1024*768 resolution. Get ratio of current screen size and adjust speed to match ratio.
+		relativeSpeed = Screen.width / (speed * 115);
 
-		//var y = Screen.Height - Screen.Height / 2;      // 50% 
-		//var y = Screen.Height - Screen.Height / 10;    // 10% 
-		//var y = Screen.Height - Screen.Height / 5;      // 20% 
-		//var y = Screen.Height - Screen.Height / 3;      // 33% 
-
-		// Set a speed relative to a 1920x1080 screen. Get screen size and area. howmuch bigger the screen is than 100x100, multiply speed by that ratio to get the conistent speed.
-
-		Vector2 position = rectTransform.anchoredPosition;
-
-		rectTransform.Translate(new Vector3(hValue * speed, vValue * speed, 0));
-		Debug.Log(rectTransform.position);
 	}
 
-	private void OnCollisionEnter2D(Collision2D collision)
-	{
-		speed /= 3f;
-	}
-	private void OnCollisionExit2D(Collision2D collision)
-	{
-		speed *= 3f;
-	}
 }
