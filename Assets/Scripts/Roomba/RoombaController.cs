@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class RoombaController : MonoBehaviour
 {
+	
 	public enum State
 	{
 		Rotating,
 		Moving,
+		Dead,
 		Following
 	};
 	public State state;
 	
 	public float speed, rotationSpeed, dirtCheckRadius;
 
-	public int dirtCounter, playerNumber;
+	public int dirtCounter, playerNumber, balloonCount;
 
 	private float followingThreshhold;
 	private Collider bumperCollider;
@@ -26,6 +28,7 @@ public class RoombaController : MonoBehaviour
 	void Awake()
 	{
 		//Physics.IgnoreCollision(bumperCollider, bodycollider, true) ;
+		balloonCount = 3;
 		keepMoving = false;
 		dirtLayer = LayerMask.GetMask("Dirt");
 		rb = GetComponent<Rigidbody>();
@@ -35,6 +38,11 @@ public class RoombaController : MonoBehaviour
 			{
 				bumperCollider = c;
 			}
+		}
+
+		foreach(Balloon b in GetComponentsInChildren<Balloon>())
+		{
+			b.papaRoomba = this;
 		}
 	}
     void Start()
@@ -49,6 +57,7 @@ public class RoombaController : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+		//Lock the Roombas to the ground, don't let them rotate so they'll fly away or go through the floor.
 		if(transform.position.y !=1)
 		{
 			transform.position =new Vector3(transform.position.x,1,transform.position.z);
@@ -63,8 +72,8 @@ public class RoombaController : MonoBehaviour
 		switch (state)
 		{
 			case State.Rotating:
-				
-					transform.Rotate(Vector3.up * rotationSpeed);
+
+				transform.Rotate(Vector3.up * rotationSpeed);
 
 				break;
 			case State.Moving:
@@ -107,28 +116,31 @@ public class RoombaController : MonoBehaviour
 
 				break;
 			case State.Following:
-				
-					//Check if front of roomba is within '5' degrees of facing the object dead on. If it is, move forward.
-					// if it isn't, Rotate toward target.
-					if (currentTarget == null || Vector3.Distance(transform.position, currentTarget.transform.position) < followingThreshhold || currentTarget.activeInHierarchy == false)
+
+				//Check if front of roomba is within '5' degrees of facing the object dead on. If it is, move forward.
+				// if it isn't, Rotate toward target.
+				if (currentTarget == null || Vector3.Distance(transform.position, currentTarget.transform.position) < followingThreshhold || currentTarget.activeInHierarchy == false)
+				{
+					currentTarget = null;
+					state = State.Moving;
+				}
+				else
+				{
+					Vector3 heading = (new Vector3(currentTarget.transform.position.x, transform.position.y, currentTarget.transform.position.z) - transform.position).normalized;
+
+					//if(transform.rotation != Quaternion.Euler(heading))
+					if (Vector3.Distance(transform.forward, heading) > .05f)
 					{
-						currentTarget = null;
-						state = State.Moving;
+						transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (heading), rotationSpeed * Time.deltaTime, 0), Vector3.up);
 					}
 					else
 					{
-						Vector3 heading = (new Vector3(currentTarget.transform.position.x, transform.position.y, currentTarget.transform.position.z) - transform.position).normalized;
-
-						//if(transform.rotation != Quaternion.Euler(heading))
-						if (Vector3.Distance(transform.forward, heading) > .05f)
-						{
-							transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (heading), rotationSpeed * Time.deltaTime, 0), Vector3.up);
-						}
-						else
-						{
-							transform.Translate(Vector3.forward * speed * Time.deltaTime);
-						}
+						transform.Translate(Vector3.forward * speed * Time.deltaTime);
 					}
+				}
+				break;
+			case State.Dead:
+				//Ur dead, don't do anything
 				break;
 			default:
 				break;
@@ -137,11 +149,17 @@ public class RoombaController : MonoBehaviour
 
 	void OnCollisionEnter(Collision collision)
 	{
-		if(collision.GetContact(0).thisCollider==bumperCollider)
-		{// Checking if hit collider is the front bumper. if it is, start rotating.
-			//transform.Translate(transform.forward * (-speed) * Time.deltaTime);
-			StartCoroutine(RotateFixed());
+		if(state != State.Dead && collision.gameObject.tag != "Ground")
+		{
+			
+			if (collision.GetContact(0).thisCollider == bumperCollider)
+			{// Checking if hit collider is the front bumper. if it is, start rotating.
+			 //transform.Translate(transform.forward * (-speed) * Time.deltaTime);
+				Debug.Log(gameObject.name + " collided with " + collision.gameObject.name);
+				StartCoroutine(RotateFixed());
+			}
 		}
+		
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -154,6 +172,16 @@ public class RoombaController : MonoBehaviour
 		}
 	}
 
+	public void BalloonPopped()
+	{
+		balloonCount--;
+		if(balloonCount <=0)
+		{
+			state = State.Dead;
+		}
+		StopAllCoroutines();
+	}
+
 	IEnumerator RotateFixed()
 	{
 		State tempState = state;
@@ -164,7 +192,12 @@ public class RoombaController : MonoBehaviour
 		if (tempState != State.Rotating)
 			state = tempState;
 		else
+		{
 			state = State.Moving;
+			StartCoroutine(KeepMoving());
+		}
+
+			
 	}
 
 	IEnumerator KeepMoving()
