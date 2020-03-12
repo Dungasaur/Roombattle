@@ -49,6 +49,16 @@ public class RoombaController : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+		if(transform.position.y !=1)
+		{
+			transform.position =new Vector3(transform.position.x,1,transform.position.z);
+		}
+
+		if(transform.rotation.x+transform.rotation.z != 0)
+		{
+			transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
+		}
+
 
 		switch (state)
 		{

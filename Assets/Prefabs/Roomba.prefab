@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3313786454995819609}
   - component: {fileID: 4945181798370031521}
   - component: {fileID: 6006982274341432491}
-  - component: {fileID: 2278755791125942013}
+  - component: {fileID: 349175891513738795}
   m_Layer: 0
   m_Name: Balloon1
   m_TagString: Untagged
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 535794601809379472}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.473, y: 0.531, z: -0.444}
+  m_LocalPosition: {x: -0.445, y: 0.466, z: 0.072}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 2619777019778973124}
@@ -79,8 +79,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &2278755791125942013
-BoxCollider:
+--- !u!135 &349175891513738795
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -90,8 +90,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.5
+  m_Center: {x: 0, y: -0.4, z: 0}
 --- !u!1 &1085567843026391807
 GameObject:
   m_ObjectHideFlags: 0
@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 7125664297987624963}
   - component: {fileID: 8977857520036302750}
   - component: {fileID: 8953211970709412122}
-  - component: {fileID: 645366826392174769}
+  - component: {fileID: 8357261961786551238}
   m_Layer: 0
   m_Name: Balloon2
   m_TagString: Untagged
@@ -119,7 +119,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1085567843026391807}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.022, y: 0.541, z: -0.6}
+  m_LocalPosition: {x: 0.021, y: 0.515, z: -0.445}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 2619777019778973124}
@@ -171,8 +171,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &645366826392174769
-BoxCollider:
+--- !u!135 &8357261961786551238
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -182,8 +182,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.5
+  m_Center: {x: 0, y: -0.4, z: 0}
 --- !u!1 &1186000074637389220
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,13 +210,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1186000074637389220}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.6240654, z: 0}
-  m_LocalScale: {x: 100, y: 99.99997, z: 99.99997}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 8135464656944884963}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &6231795711872606045
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -285,7 +285,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1213601739107140701}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.024852514, y: 0.5670359, z: 0.10309616}
@@ -388,13 +388,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3628542515883441605}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.6240654, z: 0}
   m_LocalScale: {x: 183.97285, y: 183.9728, z: 183.9728}
   m_Children: []
   m_Father: {fileID: 5167358347717413178}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &9098935432075267094
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -529,9 +529,9 @@ GameObject:
   - component: {fileID: 3890840491824624398}
   - component: {fileID: 8023619102159571681}
   - component: {fileID: 3505689556660392650}
-  - component: {fileID: 811857539734559472}
+  - component: {fileID: 9196198436347923399}
   m_Layer: 0
-  m_Name: Sphere (2)
+  m_Name: Balloon3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -545,7 +545,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6558518127775260932}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.496, y: 0.56, z: -0.378}
+  m_LocalPosition: {x: 0.419, y: 0.534, z: 0.06}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 2619777019778973124}
@@ -597,8 +597,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &811857539734559472
-BoxCollider:
+--- !u!135 &9196198436347923399
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -608,8 +608,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.5
+  m_Center: {x: 0, y: -0.4, z: 0}
 --- !u!1 &7022601760392696901
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,12 +670,12 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 4bf153fb432a35f4b962bb063671b4a2,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.5
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 4bf153fb432a35f4b962bb063671b4a2,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.5
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 4bf153fb432a35f4b962bb063671b4a2,
         type: 3}
@@ -690,7 +690,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 4bf153fb432a35f4b962bb063671b4a2,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 4bf153fb432a35f4b962bb063671b4a2,
         type: 3}
