@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[SelectionBase]
 public class Cursor : PlayerInput
 {
 	// Strings for Input
 	
 	public float speed;
 	public float relativeSpeed;
+	public int playerNumber;
 	private RectTransform rectTransform;
 	RaycastHit hit;
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[SelectionBase]
 public class RoombaController : MonoBehaviour
 {
 	
@@ -13,7 +14,7 @@ public class RoombaController : MonoBehaviour
 		Following
 	};
 	public State state;
-	
+	public Color col;
 	public float speed, rotationSpeed, dirtCheckRadius;
 
 	public int dirtCounter, playerNumber, balloonCount;
@@ -28,6 +29,7 @@ public class RoombaController : MonoBehaviour
 	void Awake()
 	{
 		//Physics.IgnoreCollision(bumperCollider, bodycollider, true) ;
+		col = GetComponentInChildren<Renderer>().material.color;
 		balloonCount = 3;
 		keepMoving = false;
 		dirtLayer = LayerMask.GetMask("Dirt");

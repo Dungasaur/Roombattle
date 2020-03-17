@@ -7,12 +7,13 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager instance;
 	// All 4 roombas
-	public GameObject roomba1, roomba2, roomba3, roomba4;
-	public GameObject cursor1, cursor2, cursor3, cursor4;
+	public RoombaController[] roombas;
+	public Cursor[] cursors;
 	// related ui panels for roombas.
 	public Text scoreText1, scoreText2, scoreText3, scoreText4;
 
 	private int score1, score2, score3, score4;
+	public int numberOfPlayers;
     
     void Awake()
     {
@@ -20,14 +21,43 @@ public class GameManager : MonoBehaviour
 		{
 			Destroy(this);
 		}
-		instance = this;
+		else
+		{
+			instance = this;
+		}
+		DontDestroyOnLoad(gameObject);
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	void Start()
+	{
+		LevelStart();
+	}
+	void LevelStart()
+	{
+
+		roombas = FindObjectsOfType<RoombaController>();
+		cursors = FindObjectsOfType<Cursor>();
+		//Max number in scene on load. Once the objects are gotten, set them inactive, so only the necessary ones are in use.
+		foreach(var roomba in roombas)
+		{
+			roomba.gameObject.SetActive(false);
+		}
+		foreach(var cursor in cursors)
+		{
+			cursor.gameObject.SetActive(false);
+		}
+		//populate with all roombas
+		for (int i = 0; i < numberOfPlayers; i++)
+		{
+			roombas[i].gameObject.SetActive(true);
+			cursors[i].gameObject.SetActive(true);
+			cursors[i].playerNumber = roombas[i].playerNumber = i + 1;
+			cursors[i].gameObject.GetComponentInChildren<Image>().color = roombas[i].col;
+		}
+	}
+
+
 
 	public void ChangeScore(int amount, int player)
 	{
