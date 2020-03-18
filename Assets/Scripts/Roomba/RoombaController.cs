@@ -17,7 +17,7 @@ public class RoombaController : MonoBehaviour
 	public Color col;
 	public float speed, rotationSpeed, dirtCheckRadius;
 
-	public int dirtCounter, playerNumber, balloonCount;
+	public int playerNumber, balloonCount;
 
 	private float followingThreshhold;
 	private Collider bumperCollider;
@@ -50,9 +50,7 @@ public class RoombaController : MonoBehaviour
     void Start()
     {
 		state = State.Moving;
-		dirtCounter = 5;
 		followingThreshhold = 1;
-		GameManager.instance.SetScore(dirtCounter, playerNumber);
     }
 
 
@@ -157,7 +155,6 @@ public class RoombaController : MonoBehaviour
 			if (collision.GetContact(0).thisCollider == bumperCollider)
 			{// Checking if hit collider is the front bumper. if it is, start rotating.
 			 //transform.Translate(transform.forward * (-speed) * Time.deltaTime);
-				Debug.Log(gameObject.name + " collided with " + collision.gameObject.name);
 				StartCoroutine(RotateFixed());
 			}
 		}
@@ -168,8 +165,7 @@ public class RoombaController : MonoBehaviour
 	{
 		if(other.gameObject.layer == 8)
 		{
-			dirtCounter++;
-			GameManager.instance.ChangeScore(dirtCounter,playerNumber);
+			GameManager.instance.ChangeScore(1,playerNumber);
 			other.transform.root.gameObject.SetActive(false);
 		}
 	}
@@ -179,9 +175,9 @@ public class RoombaController : MonoBehaviour
 		balloonCount--;
 		if(balloonCount <=0)
 		{
+			StopAllCoroutines();
 			state = State.Dead;
 		}
-		StopAllCoroutines();
 	}
 
 	IEnumerator RotateFixed()
@@ -198,8 +194,6 @@ public class RoombaController : MonoBehaviour
 			state = State.Moving;
 			StartCoroutine(KeepMoving());
 		}
-
-			
 	}
 
 	IEnumerator KeepMoving()

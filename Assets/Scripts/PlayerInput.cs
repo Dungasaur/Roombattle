@@ -8,20 +8,15 @@ public class PlayerInput : MonoBehaviour
 	private string fire1, fire2, fire3, horizontal, vertical, submit, cancel;
 
 	public float hValue, vValue;
-	// Start is called before the first frame update
-	void Start()
-	{
-
-	}
 
 	// Update is called once per frame
-	void Update()
+	protected virtual void Update()
 	{
-		if (Input.GetButton(submit))
+		if (Input.GetButtonDown(submit))
 		{
 			//do submit
 		}
-		if (Input.GetButton(cancel))
+		if (Input.GetButtonDown(cancel))
 		{
 			//do cancel
 		}
@@ -29,7 +24,7 @@ public class PlayerInput : MonoBehaviour
 		{
 			Fire1();
 		}
-		if (Input.GetButton(fire2))
+		if (Input.GetButtonDown(fire2))
 		{
 			Fire2();
 		}

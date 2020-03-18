@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - Knife
   - Balloon
+  - Bucket
   layers:
   - Default
   - TransparentFX

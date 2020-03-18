@@ -39,6 +39,7 @@ public class ObjectPool : MonoBehaviour
 			if (!dirtPool[i].activeInHierarchy)
 			{
 				o = dirtPool[i];
+				i = dirtPool.Count + 1;
 			}
 		}
 		//3   

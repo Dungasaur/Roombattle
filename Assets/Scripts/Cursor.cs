@@ -23,8 +23,9 @@ public class Cursor : PlayerInput
 	{
 		SetRelativeSpeed();
 	}
-	private void Update()
+	protected override void Update()
 	{
+		base.Update();
 	}
 
 	private void FixedUpdate()
@@ -81,16 +82,26 @@ public class Cursor : PlayerInput
 
 	}
 
+	
+
 	void PlaceDirt()
 	{
+
 		if(CastDown())
 		{
 			if(hit.collider.gameObject.tag=="Ground")
 			{
-				GameObject dirt = ObjectPool.instance.GetDirt();
-				dirt.SetActive(true);
-				dirt.transform.position = hit.point;
-
+				if(GameManager.instance.ReduceScore(1,playerNumber))
+				{
+					GameObject dirt = ObjectPool.instance.GetDirt();
+					dirt.SetActive(true);
+					dirt.transform.position = hit.point;
+				}
+				
+			}
+			else if(hit.collider.gameObject.tag=="Bucket")
+			{
+				GameManager.instance.ResetScore(playerNumber);
 			}
 		}
 	}
