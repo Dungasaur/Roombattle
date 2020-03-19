@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
 	void LevelStart()
 	{
 		timerRoutine = LevelTimer();
-		timeRemaining = 5;
+		timeRemaining = 30;
 		// Start Timer
 		StartCoroutine(timerRoutine);
 		roombas = FindObjectsOfType<RoombaController>();
