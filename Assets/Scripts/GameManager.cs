@@ -7,7 +7,8 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager instance;
 	[SerializeField]
-	private GameObject gameOverPanel;
+	private GameObject gameOverPanel, finalText;
+	
 
 	// All 4 roombas
 	public RoombaController[] roombas;
@@ -55,8 +56,7 @@ public class GameManager : MonoBehaviour
 		timerRoutine = LevelTimer();
 		timeRemaining = defaultTimeRemaining;
 		numberDead = 0;
-		// Start Timer
-		StartCoroutine(timerRoutine);
+		
 		roombas = FindObjectsOfType<RoombaController>();
 		cursors = FindObjectsOfType<Cursor>();
 		score = new int[4];
@@ -79,6 +79,9 @@ public class GameManager : MonoBehaviour
 			cursors[i].gameObject.GetComponentInChildren<Image>().color = roombas[i].col;
 			SetScore(startingScore, i);
 		}
+
+		// Start Timer
+		StartCoroutine(timerRoutine);
 	}
 
 	public void ResetScore(int player)
@@ -147,7 +150,14 @@ public class GameManager : MonoBehaviour
 		
 	}
 
-
+	public void Reset()
+	{
+		foreach(RoombaController r in roombas)
+		{
+			r.Reset();
+		}
+		LevelStart();
+	}
 	public void GameOver()
 	{
 		StopCoroutine(timerRoutine);
@@ -164,10 +174,18 @@ public class GameManager : MonoBehaviour
 		{// One Winner
 			Debug.Log("One Winner");
 			gameOverPanel.GetComponent<Image>().color = winners[0].col;
+			finalText.GetComponent<Text>().text = "Player " + (winners[0].playerNumber + 1) + " wins!\nFinal Score: " + score[winners[0].playerNumber];
 		}
 		else
 		{// Tie
 			Debug.Log("Tie");
+			gameOverPanel.GetComponent<Image>().color = Color.grey;
+			string t = "Players ";
+			for (int i = 0; i < winners.Count - 1; i++)
+			{
+				t += (winners[i].playerNumber + 1).ToString() + ", ";
+			}
+			t += (winners[winners.Count - 1].playerNumber + 1).ToString() + " Tied!";
 		}
 
 	}

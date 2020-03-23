@@ -26,6 +26,9 @@ public class RoombaController : MonoBehaviour
 	private LayerMask dirtLayer;
 	private GameObject currentTarget;
 
+	private Transform startTransform;
+	private Balloon[] balloons;
+
 	void Awake()
 	{
 		//Physics.IgnoreCollision(bumperCollider, bodycollider, true) ;
@@ -34,6 +37,7 @@ public class RoombaController : MonoBehaviour
 		keepMoving = false;
 		dirtLayer = LayerMask.GetMask("Dirt");
 		rb = GetComponent<Rigidbody>();
+		balloons = GetComponentsInChildren<Balloon>();
 		foreach(Collider c in GetComponentsInChildren<Collider>())
 		{
 			if (c.gameObject.name == "Bumper")
@@ -42,7 +46,7 @@ public class RoombaController : MonoBehaviour
 			}
 		}
 
-		foreach(Balloon b in GetComponentsInChildren<Balloon>())
+		foreach(Balloon b in balloons)
 		{
 			b.papaRoomba = this;
 		}
@@ -50,10 +54,9 @@ public class RoombaController : MonoBehaviour
     void Start()
     {
 		state = State.Moving;
+		startTransform = transform;
 		followingThreshhold = 1;
     }
-
-
 
 	private void FixedUpdate()
 	{
@@ -145,6 +148,18 @@ public class RoombaController : MonoBehaviour
 			default:
 				break;
 		}
+	}
+
+	public void Reset()
+	{
+		transform.position = startTransform.position;
+		transform.rotation = startTransform.rotation;
+		foreach(Balloon b in balloons)
+		{
+			b.Reset();
+		}
+		balloonCount = 3;
+		state = State.Moving;
 	}
 
 	void OnCollisionEnter(Collision collision)

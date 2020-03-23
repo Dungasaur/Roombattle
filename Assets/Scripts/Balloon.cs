@@ -9,7 +9,10 @@ public class Balloon : MonoBehaviour
 	{
 		papaRoomba.BalloonPopped();
 		gameObject.SetActive(false);
+	}
 
-
+	public void Reset()
+	{
+		gameObject.SetActive(true);
 	}
 }
