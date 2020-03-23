@@ -89,7 +89,6 @@ GameObject:
   - component: {fileID: 3556933193132986181}
   - component: {fileID: 2251029811598059543}
   - component: {fileID: 4362111666773799744}
-  - component: {fileID: 5474392503323741242}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Bucket
@@ -157,19 +156,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &5474392503323741242
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2060715294366983203}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.084398, y: 2, z: 1.0878556}
-  m_Center: {x: 0.02325666, y: 0, z: 0.002890706}
 --- !u!1 &3580614427059262713
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,6 +321,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5874013963889277962}
+  - component: {fileID: 7370382834132019682}
   m_Layer: 0
   m_Name: DirtBucket
   m_TagString: Bucket
@@ -361,6 +348,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7370382834132019682
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7495747230990434275}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.18909383, z: 1}
+  m_Center: {x: 0, y: 0.9489429, z: 0}
 --- !u!1 &8801718589304283400
 GameObject:
   m_ObjectHideFlags: 0

@@ -140,7 +140,7 @@ public class RoombaController : MonoBehaviour
 				}
 				break;
 			case State.Dead:
-				//Ur dead, don't do anything
+				
 				break;
 			default:
 				break;
@@ -151,7 +151,10 @@ public class RoombaController : MonoBehaviour
 	{
 		if(state != State.Dead && collision.gameObject.tag != "Ground")
 		{
-			
+			if(collision.gameObject.tag == "Wall")
+			{
+				transform.Translate(Vector3.back * 0.05f);
+			}
 			if (collision.GetContact(0).thisCollider == bumperCollider)
 			{// Checking if hit collider is the front bumper. if it is, start rotating.
 			 //transform.Translate(transform.forward * (-speed) * Time.deltaTime);
@@ -176,8 +179,15 @@ public class RoombaController : MonoBehaviour
 		if(balloonCount <=0)
 		{
 			StopAllCoroutines();
+			GameManager.instance.IDied(playerNumber);
 			state = State.Dead;
 		}
+	}
+
+	public void GameOver()
+	{
+		StopAllCoroutines();
+		state = State.Dead;
 	}
 
 	IEnumerator RotateFixed()

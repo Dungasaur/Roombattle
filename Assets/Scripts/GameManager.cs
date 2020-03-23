@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
 	public static GameManager instance;
+	[SerializeField]
+	private GameObject gameOverPanel;
+
 	// All 4 roombas
 	public RoombaController[] roombas;
 	public Cursor[] cursors;
@@ -17,12 +20,18 @@ public class GameManager : MonoBehaviour
 	private int startingScore = 5;
 
 	public int numberOfPlayers;
+	private int numberDead;
 
-	private int timeRemaining;
+	private bool gameOver;
+
+	public int timeRemaining = 30;
+	private int defaultTimeRemaining;
 	private IEnumerator timerRoutine;
 
 	void Awake()
 	{
+		defaultTimeRemaining = timeRemaining;
+		gameOver = false;
 		if (instance != null)
 		{
 			Destroy(this);
@@ -41,8 +50,11 @@ public class GameManager : MonoBehaviour
 
 	void LevelStart()
 	{
+		Time.timeScale = 1;
+		gameOverPanel.SetActive(false);
 		timerRoutine = LevelTimer();
-		timeRemaining = 30;
+		timeRemaining = defaultTimeRemaining;
+		numberDead = 0;
 		// Start Timer
 		StartCoroutine(timerRoutine);
 		roombas = FindObjectsOfType<RoombaController>();
@@ -71,7 +83,7 @@ public class GameManager : MonoBehaviour
 
 	public void ResetScore(int player)
 	{
-		if(score[player]<startingScore)
+		if (score[player] < startingScore)
 		{
 			SetScore(startingScore, player);
 		}
@@ -79,12 +91,16 @@ public class GameManager : MonoBehaviour
 
 	public void ChangeScore(int amount, int player)
 	{
-		score[player] += amount;
-		if (score[player] < 0)
+		if (!gameOver)
 		{
-			score[player] = 0;
+			score[player] += amount;
+			if (score[player] < 0)
+			{
+				score[player] = 0;
+			}
+			DisplayScore(player);
 		}
-		DisplayScore(player);
+
 	}
 
 	public void SetScore(int amount, int player)
@@ -95,25 +111,109 @@ public class GameManager : MonoBehaviour
 
 	public bool ReduceScore(int amount, int player)
 	{
-		bool canReduce = false;
-		if(score[player]>0)
+		if (!gameOver)
 		{
-			canReduce = true;
+			bool canReduce = false;
+			if (score[player] > 0)
+			{
+				canReduce = true;
+			}
+			if (canReduce)
+			{
+				ChangeScore(-amount, player);
+			}
+			return canReduce;
 		}
-		if (canReduce)
+		else
 		{
-			ChangeScore(-amount, player);
+			return false;
 		}
-		return canReduce;
 	}
 	void DisplayScore(int player)
 	{
 		scoreText[player].text = score[player].ToString();
 	}
 
+	public void IDied(int playerNumber)
+	{
+		if(!gameOver)
+		{
+			numberDead++;
+			if (numberDead >= numberOfPlayers)
+			{
+				GameOver();
+			}
+		}
+		
+	}
+
+
 	public void GameOver()
 	{
+		StopCoroutine(timerRoutine);
 		Debug.Log("Game is over, go to bed.");
+		gameOver = true;
+		List<RoombaController> winners = WhoWon();
+		foreach(RoombaController rc in roombas)
+		{
+			rc.GameOver();
+		}
+
+		gameOverPanel.SetActive(true);
+		if (winners.Count == 1)
+		{// One Winner
+			Debug.Log("One Winner");
+			gameOverPanel.GetComponent<Image>().color = winners[0].col;
+		}
+		else
+		{// Tie
+			Debug.Log("Tie");
+		}
+
+	}
+
+	private List<RoombaController> WhoWon()
+	{
+		List<RoombaController> winners = new List<RoombaController>();
+		int winnerIndex = -1;
+		if (numberDead >= numberOfPlayers - 1)
+		{// Winner is the last one left alive
+			foreach (RoombaController rc in roombas)
+			{
+				if (rc.state != RoombaController.State.Dead)
+				{
+					winnerIndex = rc.playerNumber;
+				}
+			}
+			winners.Add(roombas[winnerIndex - 1]);
+		}
+		else
+		{// if time ran out, winner is most points. tie goes to who hase more balloons.
+			winners.Add(roombas[0]);
+			//compare every roomba to see which is the highest scorer, starting with the second roomba compared to first.
+			for (int i = 1; i < numberOfPlayers; i++)
+			{
+
+				if (score[i] > score[winners[0].playerNumber])
+				{
+					winners.Clear();
+					winners.Add(roombas[i]);
+				}
+				else if (score[i] == score[winners[0].playerNumber])
+				{
+					if (roombas[i].balloonCount > winners[0].balloonCount)
+					{
+						winners.Clear();
+						winners.Add(roombas[i]);
+					}
+					else if (roombas[i].balloonCount == winners[0].balloonCount)
+					{
+						winners.Add(roombas[i]);
+					}
+				}
+			}
+		}
+		return winners;
 	}
 
 	IEnumerator LevelTimer()
