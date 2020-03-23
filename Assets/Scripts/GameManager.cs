@@ -51,6 +51,10 @@ public class GameManager : MonoBehaviour
 
 	void LevelStart()
 	{
+		for (int i = 3; i > numberOfPlayers - 1; i--) 
+		{
+			scoreText[i].transform.parent.gameObject.SetActive(false);
+		}
 		Time.timeScale = 1;
 		gameOverPanel.SetActive(false);
 		timerRoutine = LevelTimer();
@@ -179,7 +183,7 @@ public class GameManager : MonoBehaviour
 		else
 		{// Tie
 			Debug.Log("Tie");
-			gameOverPanel.GetComponent<Image>().color = Color.grey;
+			gameOverPanel.GetComponent<Image>().color = Color.black;
 			string t = "Players ";
 			for (int i = 0; i < winners.Count - 1; i++)
 			{
