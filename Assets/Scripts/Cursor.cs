@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 [SelectionBase]
 public class Cursor : PlayerInput
@@ -10,13 +12,19 @@ public class Cursor : PlayerInput
 	public float speed;
 	public float relativeSpeed;
 	public int playerNumber;
+	public bool gameOver;
 	private RectTransform rectTransform;
 	RaycastHit hit;
 
+	//For virtual mouse clicks
+	PointerEventData pe;
+
+
 	private void Awake()
 	{
+		pe = new PointerEventData(EventSystem.current);
 		rectTransform = GetComponentInChildren<RectTransform>();
-		
+		gameOver = true;
 	}
 
 	private void Start()
@@ -71,8 +79,28 @@ public class Cursor : PlayerInput
 		Debug.Log("Exited");
 	}
 	protected override void Fire1()
-	{
-		PlaceDirt();
+	{// used to both put dirt down and select Menu Options.
+		if(gameOver)
+		{ // adapted from https://answers.unity.com/questions/783279/46-ui-how-to-detect-mouse-over-on-button.html
+			pe.position = rectTransform.position;
+			List<RaycastResult> hits = new List<RaycastResult>();
+			EventSystem.current.RaycastAll(pe, hits);
+
+			for(int i=0; i<hits.Count;i++)
+			{
+				Button b = hits[i].gameObject.GetComponent<Button>();
+				if(b!=null)
+				{
+					b.onClick.Invoke();
+				}
+			}
+
+		}
+		else
+		{
+			PlaceDirt();
+		}
+		
 	}
 	
 	void SetRelativeSpeed()

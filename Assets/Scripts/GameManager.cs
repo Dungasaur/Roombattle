@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
 
 	void Awake()
 	{
+		numberOfPlayers = Statics.numberOfPlayers;
 		defaultTimeRemaining = timeRemaining;
 		gameOver = false;
 		if (instance != null)
@@ -60,7 +61,7 @@ public class GameManager : MonoBehaviour
 		timerRoutine = LevelTimer();
 		timeRemaining = defaultTimeRemaining;
 		numberDead = 0;
-		
+		gameOver = false;
 		roombas = FindObjectsOfType<RoombaController>();
 		cursors = FindObjectsOfType<Cursor>();
 		score = new int[4];
@@ -78,6 +79,7 @@ public class GameManager : MonoBehaviour
 		{
 			roombas[i].gameObject.SetActive(true);
 			cursors[i].gameObject.SetActive(true);
+			cursors[i].gameOver = gameOver;
 			cursors[i].playerNumber = i;
 			roombas[i].playerNumber = i;
 			cursors[i].gameObject.GetComponentInChildren<Image>().color = roombas[i].col;
@@ -160,6 +162,7 @@ public class GameManager : MonoBehaviour
 		{
 			r.Reset();
 		}
+		gameOverPanel.SetActive(false);
 		LevelStart();
 	}
 	public void GameOver()
@@ -171,6 +174,11 @@ public class GameManager : MonoBehaviour
 		foreach(RoombaController rc in roombas)
 		{
 			rc.GameOver();
+		}
+
+		foreach(Cursor c in cursors)
+		{
+			c.gameOver = true;
 		}
 
 		gameOverPanel.SetActive(true);

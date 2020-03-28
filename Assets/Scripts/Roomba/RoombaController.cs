@@ -26,7 +26,8 @@ public class RoombaController : MonoBehaviour
 	private LayerMask dirtLayer;
 	private GameObject currentTarget;
 
-	private Transform startTransform;
+	private Vector3 startPosition;
+	private Quaternion startRotation;
 	private Balloon[] balloons;
 
 	void Awake()
@@ -54,7 +55,8 @@ public class RoombaController : MonoBehaviour
     void Start()
     {
 		state = State.Moving;
-		startTransform = transform;
+		startPosition = transform.position;
+		startRotation = transform.rotation;
 		followingThreshhold = 1;
     }
 
@@ -152,8 +154,8 @@ public class RoombaController : MonoBehaviour
 
 	public void Reset()
 	{
-		transform.position = startTransform.position;
-		transform.rotation = startTransform.rotation;
+		transform.position = startPosition;
+		transform.rotation = startRotation;
 		foreach(Balloon b in balloons)
 		{
 			b.Reset();
