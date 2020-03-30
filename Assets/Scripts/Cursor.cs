@@ -78,7 +78,7 @@ public class Cursor : PlayerInput
 		relativeSpeed *= 3f;
 		Debug.Log("Exited");
 	}
-	protected override void Fire1()
+	protected override void Fire1Down()
 	{// used to both put dirt down and select Menu Options.
 		if(gameOver)
 		{ // adapted from https://answers.unity.com/questions/783279/46-ui-how-to-detect-mouse-over-on-button.html
@@ -100,7 +100,16 @@ public class Cursor : PlayerInput
 		{
 			PlaceDirt();
 		}
-		
+	}
+
+	protected override void Fire2Down()
+	{
+		relativeSpeed /= 2f;
+	}
+
+	protected override void Fire2Up()
+	{
+		relativeSpeed *= 2f;
 	}
 	
 	void SetRelativeSpeed()

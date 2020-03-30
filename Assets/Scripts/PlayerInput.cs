@@ -22,11 +22,20 @@ public class PlayerInput : MonoBehaviour
 		}
 		if (Input.GetButtonDown(fire1))
 		{
-			Fire1();
+			Fire1Down();
+		}
+
+		if(Input.GetButtonUp(fire1))
+		{
+			Fire1Up();
 		}
 		if (Input.GetButtonDown(fire2))
 		{
-			Fire2();
+			Fire2Down();
+		}
+		if(Input.GetButtonUp(fire2))
+		{
+			Fire2Up();
 		}
 		if (Input.GetButtonDown(fire3))
 		{
@@ -37,11 +46,20 @@ public class PlayerInput : MonoBehaviour
 		vValue = Input.GetAxis(vertical);
 	}
 
-	protected virtual void Fire1()
+	protected virtual void Fire1Down()
 	{
 
 	}
-	protected virtual void Fire2()
+
+	protected virtual void Fire1Up()
+	{
+
+	}
+	protected virtual void Fire2Down()
+	{
+
+	}
+	protected virtual void Fire2Up()
 	{
 
 	}

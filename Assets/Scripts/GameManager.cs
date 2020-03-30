@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
 	public static GameManager instance;
 	[SerializeField]
 	private GameObject gameOverPanel, finalText;
-	
 
 	// All 4 roombas
 	public RoombaController[] roombas;
@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviour
 		for (int i = 0; i < numberOfPlayers; i++)
 		{
 			roombas[i].gameObject.SetActive(true);
+			roombas[i].Reset();
 			cursors[i].gameObject.SetActive(true);
 			cursors[i].gameOver = gameOver;
 			cursors[i].playerNumber = i;
@@ -244,6 +245,11 @@ public class GameManager : MonoBehaviour
 			}
 		}
 		return winners;
+	}
+
+	public void MainMenu()
+	{
+		SceneManager.LoadScene("MainMenu");
 	}
 
 	IEnumerator LevelTimer()

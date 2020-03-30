@@ -242,9 +242,10 @@ MonoBehaviour:
   cancel: 
   hValue: 0
   vValue: 0
-  speed: 3
+  speed: 1.5
   relativeSpeed: 0
   playerNumber: 0
+  gameOver: 0
 --- !u!50 &993153643631216983
 Rigidbody2D:
   serializedVersion: 4
