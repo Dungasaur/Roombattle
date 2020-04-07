@@ -6,14 +6,23 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-	public Text playerText;
+	public Text playerText, timeText;
 	public Cursor[] cursors;
 
 	
     void Start()
     {
-		Statics.numberOfPlayers = 2;
+		if(Statics.numberOfPlayers==0)
+		{
+			Statics.numberOfPlayers = 2;
+		}
+		if(Statics.defaultTime==0)
+		{
+			Statics.defaultTime = 30;
+		}
+		
 		playerText.text = Statics.numberOfPlayers.ToString();
+		timeText.text = Statics.defaultTime.ToString();
 		cursors[2].gameObject.SetActive(false);
 		cursors[3].gameObject.SetActive(false);
     }
@@ -32,6 +41,15 @@ public class MainMenu : MonoBehaviour
 			{
 				cursors[Statics.numberOfPlayers].gameObject.SetActive(false);
 			}
+		}
+	}
+
+	public void ChangeTime(int i)
+	{
+		if (i>0 && Statics.defaultTime <120 || i<0 && Statics.defaultTime>15)
+		{
+			Statics.defaultTime += i;
+			timeText.text = Statics.defaultTime.ToString();
 		}
 	}
 

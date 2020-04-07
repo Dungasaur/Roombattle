@@ -5,4 +5,5 @@ using UnityEngine;
 public static class Statics
 {
 	public static int numberOfPlayers;
+	public static int defaultTime;
 }

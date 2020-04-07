@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
 	void Awake()
 	{
 		numberOfPlayers = Statics.numberOfPlayers;
-		defaultTimeRemaining = timeRemaining;
+		defaultTimeRemaining = Statics.defaultTime;
 		gameOver = false;
 		if (instance != null)
 		{
@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
 
 	void Start()
 	{
+		GetComponent<AudioPlayer>().PlayRandomClip();
 		LevelStart();
 	}
 

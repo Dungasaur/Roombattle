@@ -5,7 +5,6 @@ using UnityEngine;
 [SelectionBase]
 public class RoombaController : MonoBehaviour
 {
-	
 	public enum State
 	{
 		Rotating,
@@ -18,6 +17,7 @@ public class RoombaController : MonoBehaviour
 	public float speed, rotationSpeed, dirtCheckRadius;
 
 	public int playerNumber, balloonCount;
+	public AudioPlayer audioPlayer;
 
 	private float followingThreshhold;
 	private Collider bumperCollider;
@@ -51,6 +51,7 @@ public class RoombaController : MonoBehaviour
 		{
 			b.papaRoomba = this;
 		}
+		audioPlayer = GetComponent<AudioPlayer>();
 	}
     void Start()
     {
@@ -170,11 +171,12 @@ public class RoombaController : MonoBehaviour
 		{
 			if(collision.gameObject.tag == "Wall")
 			{
-				transform.Translate(Vector3.back * 0.05f);
+				transform.Translate(Vector3.back * 0.02f);
 			}
 			if (collision.GetContact(0).thisCollider == bumperCollider)
 			{// Checking if hit collider is the front bumper. if it is, start rotating.
 			 //transform.Translate(transform.forward * (-speed) * Time.deltaTime);
+				audioPlayer.PlayClip(0, Random.Range(0.7f, 1.2f));
 				StartCoroutine(RotateFixed());
 			}
 		}
@@ -192,6 +194,7 @@ public class RoombaController : MonoBehaviour
 
 	public void BalloonPopped()
 	{
+		audioPlayer.PlayRandomClip();
 		balloonCount--;
 		if(balloonCount <=0)
 		{
