@@ -66,12 +66,12 @@ public class RoombaController : MonoBehaviour
 		//Lock the Roombas to the ground, don't let them rotate so they'll fly away or go through the floor.
 		if(transform.position.y !=1)
 		{
-			transform.position =new Vector3(transform.position.x,1,transform.position.z);
+			transform.position = new Vector3(transform.position.x,1,transform.position.z);
 		}
 
-		if(transform.rotation.x+transform.rotation.z != 0)
+		if (transform.localRotation.x+transform.localRotation.z != 0)
 		{
-			transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
+			transform.localRotation = new Quaternion(0, transform.localRotation.y, 0, transform.localRotation.w);
 		}
 
 
