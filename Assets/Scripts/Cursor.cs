@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class Cursor : PlayerInput
 {
 	// Strings for Input
-	
+
 	public float speed;
 	public float relativeSpeed;
 	public int playerNumber;
@@ -19,9 +19,14 @@ public class Cursor : PlayerInput
 	//For virtual mouse clicks
 	PointerEventData pe;
 
+	// idea from https://gamedev.stackexchange.com/questions/154954/setting-object-position-in-screen-space-camera
+	RectTransform canvasRT;
+	Vector2 scale;
 
 	private void Awake()
 	{
+		canvasRT = (RectTransform)transform.parent.GetComponent<Canvas>().transform;
+		//scale = new Vector2( canvasRT.rect. / Screen.width, canvasRT.height / Screen.height);
 		pe = new PointerEventData(EventSystem.current);
 		rectTransform = GetComponentInChildren<RectTransform>();
 		gameOver = true;
@@ -38,7 +43,7 @@ public class Cursor : PlayerInput
 
 	private void FixedUpdate()
 	{
-		
+
 		//SetRelativeSpeed();
 		//var y = Screen.Height - Screen.Height / 2;      // 50% 
 		//var y = Screen.Height - Screen.Height / 10;    // 10% 
@@ -47,25 +52,24 @@ public class Cursor : PlayerInput
 
 		// Set a speed relative to a 1920x1080 screen. Get screen size and area. howmuch bigger the screen is than 100x100, multiply speed by that ratio to get the conistent speed.
 
-		Vector2 position = rectTransform.anchoredPosition;
 
-		rectTransform.Translate(new Vector3(hValue * relativeSpeed,vValue * relativeSpeed, 0));
-		if(rectTransform.position.y>Screen.height)
+		rectTransform.anchoredPosition += (new Vector2(hValue * relativeSpeed, vValue * relativeSpeed));
+		if (rectTransform.anchoredPosition.y > canvasRT.rect.height)
 		{
-			rectTransform.position = new Vector2(rectTransform.position.x, Screen.height);
+			rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, canvasRT.rect.height);
 		}
-		else if(rectTransform.position.y < 0)
+		else if (rectTransform.anchoredPosition.y < 0)
 		{
-			rectTransform.position = new Vector2(rectTransform.position.x, 0);
+			rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, 0);
 		}
 
-		if(rectTransform.position.x>Screen.width)
+		if (rectTransform.anchoredPosition.x > canvasRT.rect.width)
 		{
-			rectTransform.position = new Vector2(Screen.width, rectTransform.position.y);
+			rectTransform.anchoredPosition = new Vector2(canvasRT.rect.width, rectTransform.anchoredPosition.y);
 		}
-		else if (rectTransform.position.x < 0)
+		else if (rectTransform.anchoredPosition.x < 0)
 		{
-			rectTransform.position = new Vector2(0, rectTransform.position.y);
+			rectTransform.anchoredPosition = new Vector2(0, rectTransform.anchoredPosition.y);
 		}
 	}
 	private void OnCollisionEnter2D(Collision2D collision)
@@ -80,16 +84,16 @@ public class Cursor : PlayerInput
 	}
 	protected override void Fire1Down()
 	{// used to both put dirt down and select Menu Options.
-		if(gameOver)
+		if (gameOver)
 		{ // adapted from https://answers.unity.com/questions/783279/46-ui-how-to-detect-mouse-over-on-button.html
-			pe.position = rectTransform.position;
+			pe.position = rectTransform.anchoredPosition;
 			List<RaycastResult> hits = new List<RaycastResult>();
 			EventSystem.current.RaycastAll(pe, hits);
 
-			for(int i=0; i<hits.Count;i++)
+			for (int i = 0; i < hits.Count; i++)
 			{
 				Button b = hits[i].gameObject.GetComponent<Button>();
-				if(b!=null)
+				if (b != null)
 				{
 					b.onClick.Invoke();
 				}
@@ -111,7 +115,7 @@ public class Cursor : PlayerInput
 	{
 		relativeSpeed *= 2f;
 	}
-	
+
 	void SetRelativeSpeed()
 	{
 		// current speed is based off 1024*768 resolution. Get ratio of current screen size and adjust speed to match ratio.
@@ -119,24 +123,24 @@ public class Cursor : PlayerInput
 
 	}
 
-	
+
 
 	void PlaceDirt()
 	{
 
-		if(CastDown())
+		if (CastDown())
 		{
-			if(hit.collider.gameObject.tag=="Ground")
+			if (hit.collider.gameObject.tag == "Ground")
 			{
-				if(GameManager.instance.ReduceScore(1,playerNumber))
+				if (GameManager.instance.ReduceScore(1, playerNumber))
 				{
 					GameObject dirt = ObjectPool.instance.GetDirt();
 					dirt.SetActive(true);
 					dirt.transform.position = hit.point;
 				}
-				
+
 			}
-			else if(hit.collider.gameObject.tag=="Bucket")
+			else if (hit.collider.gameObject.tag == "Bucket")
 			{
 				GameManager.instance.ResetScore(playerNumber);
 			}
@@ -146,8 +150,8 @@ public class Cursor : PlayerInput
 	bool CastDown()
 	{
 		bool hitSomething = false;
-		Ray ray =Camera.main.ViewportPointToRay(new Vector3(rectTransform.position.x / Screen.width, rectTransform.position.y / Screen.height));
-		if (Physics.Raycast(ray,out hit))
+		Ray ray = Camera.main.ViewportPointToRay(new Vector3(rectTransform.position.x / Screen.width, rectTransform.position.y / Screen.height));
+		if (Physics.Raycast(ray, out hit))
 		{
 			Debug.Log(hit.collider.gameObject.name);
 			hitSomething = true;
