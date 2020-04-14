@@ -64,9 +64,9 @@ public class RoombaController : MonoBehaviour
 	private void FixedUpdate()
 	{
 		//Lock the Roombas to the ground, don't let them rotate so they'll fly away or go through the floor.
-		if(transform.position.y !=1)
+		if(transform.localPosition.y !=1)
 		{
-			transform.position = new Vector3(transform.position.x,1,transform.position.z);
+			transform.localPosition = new Vector3(transform.localPosition.x,1,transform.localPosition.z);
 		}
 
 		if (transform.localRotation.x+transform.localRotation.z != 0)
@@ -132,16 +132,17 @@ public class RoombaController : MonoBehaviour
 				}
 				else
 				{
-					Vector3 heading = (new Vector3(currentTarget.transform.position.x, transform.position.y, currentTarget.transform.position.z) - transform.position).normalized;
-
+					Vector3 heading = (new Vector3(currentTarget.transform.position.x, currentTarget.transform.position.y, transform.position.z) - transform.position).normalized;
+					Debug.Log(Vector3.Distance(transform.forward, heading));
 					//if(transform.rotation != Quaternion.Euler(heading))
 					if (Vector3.Distance(transform.forward, heading) > .05f)
 					{
-						transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (heading), rotationSpeed * Time.deltaTime, 0), Vector3.up);
+						transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, (heading), rotationSpeed * Time.deltaTime, .1f), transform.up);
 					}
 					else
 					{
 						transform.Translate(Vector3.forward * speed * Time.deltaTime);
+						
 					}
 				}
 				break;

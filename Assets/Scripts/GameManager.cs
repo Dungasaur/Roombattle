@@ -182,13 +182,13 @@ public class GameManager : MonoBehaviour
 		{
 			c.gameOver = true;
 		}
-
+		string winnerText;
 		gameOverPanel.SetActive(true);
 		if (winners.Count == 1)
 		{// One Winner
 			Debug.Log("One Winner");
 			gameOverPanel.GetComponent<Image>().color = winners[0].col;
-			finalText.GetComponent<Text>().text = "Player " + (winners[0].playerNumber + 1) + " wins!\nFinal Score: " + score[winners[0].playerNumber];
+			winnerText= "Player " + (winners[0].playerNumber + 1) + " wins!\nFinal Score: " + score[winners[0].playerNumber];
 		}
 		else
 		{// Tie
@@ -200,8 +200,9 @@ public class GameManager : MonoBehaviour
 				t += (winners[i].playerNumber + 1).ToString() + ", ";
 			}
 			t += (winners[winners.Count - 1].playerNumber + 1).ToString() + " Tied!";
+			winnerText = t;
 		}
-
+		finalText.GetComponent<Text>().text = winnerText;
 	}
 
 	private List<RoombaController> WhoWon()
