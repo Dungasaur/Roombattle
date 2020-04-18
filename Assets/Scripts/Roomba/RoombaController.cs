@@ -205,6 +205,11 @@ public class RoombaController : MonoBehaviour
 		}
 	}
 
+	public void GetScore(int score)
+	{
+		GameManager.instance.ChangeScore(score, playerNumber);
+	}
+
 	public void GameOver()
 	{
 		StopAllCoroutines();
