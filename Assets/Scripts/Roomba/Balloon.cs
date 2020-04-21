@@ -8,9 +8,13 @@ public class Balloon : MonoBehaviour
 	private int balloonScore = 5;
 	private void OnTriggerEnter(Collider other)
 	{
-		papaRoomba.BalloonPopped();
-		gameObject.SetActive(false);
-		other.transform.root.GetComponent<RoombaController>().GetScore(balloonScore);
+		if(other.gameObject.name == "Knife")
+		{
+			papaRoomba.BalloonPopped();
+			other.transform.parent.gameObject.GetComponent<RoombaController>().GetScore(balloonScore);
+			gameObject.SetActive(false);
+		}
+		
 	}
 
 	public void Reset()

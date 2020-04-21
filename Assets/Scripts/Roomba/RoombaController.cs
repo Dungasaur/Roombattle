@@ -86,7 +86,7 @@ public class RoombaController : MonoBehaviour
 				if (!keepMoving)
 				{
 					Collider[] nearbyDirt = Physics.OverlapSphere(transform.position, dirtCheckRadius, dirtLayer, QueryTriggerInteraction.Collide);
-					if (nearbyDirt.Length > 1)
+					if (nearbyDirt.Length > 0)
 					{
 						GameObject target = nearbyDirt[0].gameObject;
 						float distance = Vector3.Distance(transform.position, target.transform.position);
@@ -133,7 +133,6 @@ public class RoombaController : MonoBehaviour
 				else
 				{
 					Vector3 heading = (new Vector3(currentTarget.transform.position.x, currentTarget.transform.position.y, transform.position.z) - transform.position).normalized;
-					Debug.Log(Vector3.Distance(transform.forward, heading));
 					//if(transform.rotation != Quaternion.Euler(heading))
 					if (Vector3.Distance(transform.forward, heading) > .05f)
 					{
@@ -223,13 +222,13 @@ public class RoombaController : MonoBehaviour
 		currentTarget = null;
 		yield return new WaitForSeconds(1);
 
-		if (tempState != State.Rotating)
-			state = tempState;
-		else
-		{
+		//if (tempState != State.Rotating)
+		//	state = tempState;
+		//else
+		//{
 			state = State.Moving;
 			StartCoroutine(KeepMoving());
-		}
+		//}
 	}
 
 	IEnumerator KeepMoving()

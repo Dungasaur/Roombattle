@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager instance;
 	[SerializeField]
-	private GameObject gameOverPanel, finalText;
+	private GameObject gameOverPanel, finalText, highScorePanel, hsPromptText;
 
 	// All 4 roombas
 	public RoombaController[] roombas;
@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour
 	public int timeRemaining = 30;
 	private int defaultTimeRemaining;
 	private IEnumerator timerRoutine;
+	// For high score creation and saving
+	public RoombaController winner;
+	public int highScorePosition;
 
 	void Awake()
 	{
@@ -42,7 +45,6 @@ public class GameManager : MonoBehaviour
 		{
 			instance = this;
 		}
-		DontDestroyOnLoad(gameObject);
 	}
 
 	void Start()
@@ -167,10 +169,10 @@ public class GameManager : MonoBehaviour
 		gameOverPanel.SetActive(false);
 		LevelStart();
 	}
+
 	public void GameOver()
 	{
 		StopCoroutine(timerRoutine);
-		Debug.Log("Game is over, go to bed.");
 		gameOver = true;
 		List<RoombaController> winners = WhoWon();
 		foreach(RoombaController rc in roombas)
@@ -182,25 +184,29 @@ public class GameManager : MonoBehaviour
 		{
 			c.gameOver = true;
 		}
+
 		string winnerText;
-		gameOverPanel.SetActive(true);
+		
 		if (winners.Count == 1)
 		{// One Winner
-			Debug.Log("One Winner");
+		 //Check for High Score (only if there is one winner)
+			winner = winners[0];
+			CheckForHighScore(winners[0]);
+
 			gameOverPanel.GetComponent<Image>().color = winners[0].col;
 			winnerText= "Player " + (winners[0].playerNumber + 1) + " wins!\nFinal Score: " + score[winners[0].playerNumber];
 		}
 		else
 		{// Tie
-			Debug.Log("Tie");
+			gameOverPanel.SetActive(true);
 			gameOverPanel.GetComponent<Image>().color = Color.black;
-			string t = "Players ";
+			string multiWinnerText = "Players ";
 			for (int i = 0; i < winners.Count - 1; i++)
 			{
-				t += (winners[i].playerNumber + 1).ToString() + ", ";
+				multiWinnerText += (winners[i].playerNumber + 1).ToString() + ", ";
 			}
-			t += (winners[winners.Count - 1].playerNumber + 1).ToString() + " Tied!";
-			winnerText = t;
+			multiWinnerText += (winners[winners.Count - 1].playerNumber + 1).ToString() + " Tied!";
+			winnerText = multiWinnerText;
 		}
 		finalText.GetComponent<Text>().text = winnerText;
 	}
@@ -247,6 +253,56 @@ public class GameManager : MonoBehaviour
 			}
 		}
 		return winners;
+	}
+
+	public void CheckForHighScore(RoombaController rc)
+	{
+		int scorePlaceIndex=-1;
+		for(int i=0;i<PersistantHighScoreList.scoreList.Length;i++)
+		{
+			if(score[rc.playerNumber]>PersistantHighScoreList.scoreList[i].score)
+			{
+				scorePlaceIndex = i;
+				
+			}
+			else
+			{
+				i = 100;
+			}
+		}
+
+		if(scorePlaceIndex!=-1)
+		{// If there is a highscore change, Create new HighScore object and insert into high score array in proper place, then save scores.
+			highScorePosition = scorePlaceIndex;
+			highScorePanel.SetActive(true);
+			highScorePanel.GetComponent<Image>().color = rc.col;
+			hsPromptText.GetComponent<Text>().text = "Player " + (rc.playerNumber+1).ToString() + ", enter your initials!";
+		}
+		else
+		{
+			//Turn on gameOverPanel
+			gameOverPanel.SetActive(true);
+		}
+	}
+
+	public void SaveHighScore(string initials)
+	{
+		HighScore highScore = new HighScore(initials, score[winner.playerNumber]);
+		//insert highscore into highScorePosition index of PersistantHighScoreList
+		for (int i = 0; i < highScorePosition; i++)
+		{
+			PersistantHighScoreList.scoreList[i] = PersistantHighScoreList.scoreList[i + 1];
+		}
+		PersistantHighScoreList.scoreList[highScorePosition] = highScore;
+		PersistantHighScoreList.needToSave = true;
+		// Deactivate highscorepanel and activate end game panel.
+		DeactivateHighScorePanel();
+	}
+
+	public void DeactivateHighScorePanel()
+	{
+		highScorePanel.SetActive(false);
+		gameOverPanel.SetActive(true);
 	}
 
 	public void MainMenu()

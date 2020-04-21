@@ -23,8 +23,15 @@ public class MainMenu : MonoBehaviour
 		
 		playerText.text = Statics.numberOfPlayers.ToString();
 		timeText.text = Statics.defaultTime.ToString();
-		cursors[2].gameObject.SetActive(false);
-		cursors[3].gameObject.SetActive(false);
+		
+		if(Statics.numberOfPlayers<4)
+		{
+			if(Statics.numberOfPlayers<3)
+			{
+				cursors[2].gameObject.SetActive(false);
+			}
+			cursors[3].gameObject.SetActive(false);
+		}
     }
 
 	public void ChangePlayers(int i)
