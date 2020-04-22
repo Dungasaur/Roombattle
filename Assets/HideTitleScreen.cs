@@ -5,7 +5,7 @@ using UnityEngine;
 public class HideTitleScreen : MonoBehaviour
 {
 	public GameObject menu;
-    void Start()
+    void Awake()
     {
         if(Statics.numberOfPlayers!=0)
 		{

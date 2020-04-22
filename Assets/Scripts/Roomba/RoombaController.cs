@@ -20,7 +20,7 @@ public class RoombaController : MonoBehaviour
 	public AudioPlayer audioPlayer;
 
 	private float followingThreshhold;
-	private Collider bumperCollider;
+	private Collider bumperCollider, bodyCollider;
 	private bool keepMoving;
 	private Rigidbody rb;
 	private LayerMask dirtLayer;
@@ -32,7 +32,8 @@ public class RoombaController : MonoBehaviour
 
 	void Awake()
 	{
-		//Physics.IgnoreCollision(bumperCollider, bodycollider, true) ;
+		startPosition = transform.position;
+		startRotation = transform.rotation;
 		col = GetComponentInChildren<Renderer>().material.color;
 		balloonCount = 3;
 		keepMoving = false;
@@ -45,9 +46,13 @@ public class RoombaController : MonoBehaviour
 			{
 				bumperCollider = c;
 			}
+			if (c.gameObject.name == "Body")
+			{
+				bodyCollider = c;
+			}
 		}
-
-		foreach(Balloon b in balloons)
+		Physics.IgnoreCollision(bumperCollider, bodyCollider, true);
+		foreach (Balloon b in balloons)
 		{
 			b.papaRoomba = this;
 		}

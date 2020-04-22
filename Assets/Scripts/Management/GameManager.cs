@@ -65,8 +65,6 @@ public class GameManager : MonoBehaviour
 		timeRemaining = defaultTimeRemaining;
 		numberDead = 0;
 		gameOver = false;
-		roombas = FindObjectsOfType<RoombaController>();
-		cursors = FindObjectsOfType<Cursor>();
 		score = new int[4];
 		//Max number in scene on load. Once the objects are gotten, set them inactive, so only the necessary ones are in use.
 		foreach (var roomba in roombas)
