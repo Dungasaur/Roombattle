@@ -258,7 +258,7 @@ public class GameManager : MonoBehaviour
 		int scorePlaceIndex=-1;
 		for(int i=0;i<PersistantHighScoreList.scoreList.Length;i++)
 		{
-			if(score[rc.playerNumber]>PersistantHighScoreList.scoreList[i].score)
+			if(score[rc.playerNumber-1]>PersistantHighScoreList.scoreList[i].score)
 			{
 				scorePlaceIndex = i;
 				

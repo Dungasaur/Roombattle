@@ -46,12 +46,12 @@ public class RoombaController : MonoBehaviour
 			{
 				bumperCollider = c;
 			}
-			if (c.gameObject.name == "Body")
-			{
-				bodyCollider = c;
-			}
+			//if (c.gameObject.name == "Body")
+			//{
+			//	bodyCollider = c;
+			//}
 		}
-		Physics.IgnoreCollision(bumperCollider, bodyCollider, true);
+		//Physics.IgnoreCollision(bumperCollider, bodyCollider, true);
 		foreach (Balloon b in balloons)
 		{
 			b.papaRoomba = this;
@@ -78,7 +78,6 @@ public class RoombaController : MonoBehaviour
 		{
 			transform.localRotation = new Quaternion(0, transform.localRotation.y, 0, transform.localRotation.w);
 		}
-
 
 		switch (state)
 		{
@@ -239,8 +238,10 @@ public class RoombaController : MonoBehaviour
 	IEnumerator KeepMoving()
 	{
 		keepMoving = true;
+		Debug.Log(gameObject.name + "keepmoving = true");
 		yield return new WaitForSeconds(0.5f);
 		keepMoving = false;
+		Debug.Log(gameObject.name + "keepmoving = false");
 	}
 
 	//IEnumerator RotateDynamic(Vector3 position)
