@@ -42,24 +42,6 @@ public class Cursor : PlayerInput
 	protected override void Update()
 	{
 		base.Update();
-		//rectTransform.anchoredPosition += (new Vector2(hValue * relativeSpeed * Time.deltaTime, vValue * relativeSpeed * Time.deltaTime));
-		//if (rectTransform.anchoredPosition.y > canvasRT.rect.height)
-		//{
-		//	rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, canvasRT.rect.height);
-		//}
-		//else if (rectTransform.anchoredPosition.y < 0)
-		//{
-		//	rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, 0);
-		//}
-
-		//if (rectTransform.anchoredPosition.x > canvasRT.rect.width)
-		//{
-		//	rectTransform.anchoredPosition = new Vector2(canvasRT.rect.width, rectTransform.anchoredPosition.y);
-		//}
-		//else if (rectTransform.anchoredPosition.x < 0)
-		//{
-		//	rectTransform.anchoredPosition = new Vector2(0, rectTransform.anchoredPosition.y);
-		//}
 	}
 
 	private void FixedUpdate()

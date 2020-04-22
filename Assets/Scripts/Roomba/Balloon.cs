@@ -13,7 +13,7 @@ public class Balloon : MonoBehaviour
 		{
 			papaRoomba.BalloonPopped();
 			other.transform.parent.gameObject.GetComponent<RoombaController>().GetScore(balloonScore);
-			GameObject.Instantiate(popParticle, transform.parent, true);
+			GameObject.Instantiate(popParticle,transform.position,Quaternion.identity);
 			gameObject.SetActive(false);
 		}
 		
