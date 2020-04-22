@@ -14,7 +14,7 @@ public class AudioPlayer: MonoBehaviour
 	}
 	public void PlayRandomClip()
 	{
-		if(randomClips!=null)
+		if(randomClips.Length>0)
 		{
 			audioSource.pitch = 1;
 			audioSource.clip = randomClips[Random.Range(0, randomClips.Length)];
@@ -24,8 +24,11 @@ public class AudioPlayer: MonoBehaviour
 
 	public void PlayClip(int index, float pitch)
 	{
-		audioSource.pitch = pitch;
-		audioSource.clip = sortedClips[index];
-		audioSource.Play();
+		if(sortedClips.Length>0)
+		{
+			audioSource.pitch = pitch;
+			audioSource.clip = sortedClips[index];
+			audioSource.Play();
+		}
 	}
 }

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4953397189114752423}
   - component: {fileID: 1257085636036034134}
   m_Layer: 0
-  m_Name: Balloon1
+  m_Name: Balloon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -107,6 +107,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   papaRoomba: {fileID: 0}
+  popParticle: {fileID: 9087857654367838114, guid: eba75c6ed9959a94895c74b05c777694,
+    type: 3}
 --- !u!54 &1257085636036034134
 Rigidbody:
   m_ObjectHideFlags: 0

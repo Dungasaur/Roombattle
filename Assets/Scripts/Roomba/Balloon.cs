@@ -5,6 +5,7 @@ using UnityEngine;
 public class Balloon : MonoBehaviour
 {
 	public RoombaController papaRoomba;
+	public GameObject popParticle;
 	private int balloonScore = 5;
 	private void OnTriggerEnter(Collider other)
 	{
@@ -12,6 +13,7 @@ public class Balloon : MonoBehaviour
 		{
 			papaRoomba.BalloonPopped();
 			other.transform.parent.gameObject.GetComponent<RoombaController>().GetScore(balloonScore);
+			GameObject.Instantiate(popParticle, transform.parent, true);
 			gameObject.SetActive(false);
 		}
 		
