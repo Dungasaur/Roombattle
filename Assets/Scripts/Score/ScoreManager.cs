@@ -111,6 +111,7 @@ public class ScoreManager : MonoBehaviour
 			sc = (SaveContainer)bformatter.Deserialize(stream);
 			stream.Close();
 			currentScoreList = sc.highScores;
+			PersistantHighScoreList.scoreList = currentScoreList;
 			UpdateLeaderboard();
 			Debug.Log("Loaded");
 

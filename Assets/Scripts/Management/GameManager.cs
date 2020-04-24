@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
 
 	void LevelStart()
 	{
-		for (int i = 3; i > numberOfPlayers - 1; i--) 
+		for (int i = 3; i >= numberOfPlayers; i--) 
 		{
 			scoreText[i].transform.parent.gameObject.SetActive(false);
 		}
@@ -82,19 +82,23 @@ public class GameManager : MonoBehaviour
 			roombas[i].Reset();
 			cursors[i].gameObject.SetActive(true);
 			cursors[i].gameOver = gameOver;
-			cursors[i].playerNumber = i;
-			roombas[i].playerNumber = i;
+			cursors[i].playerNumber = i+1;
+			roombas[i].playerNumber = i+1;
 			cursors[i].gameObject.GetComponentInChildren<Image>().color = roombas[i].col;
-			SetScore(startingScore, i);
+			SetScore(startingScore, i+1);
 		}
 
+		foreach(var dirt in GameObject.FindGameObjectsWithTag("Dirt"))
+		{
+			dirt.SetActive(false);
+		}
 		// Start Timer
 		StartCoroutine(timerRoutine);
 	}
 
 	public void ResetScore(int player)
 	{
-		if (score[player] < startingScore)
+		if (score[player-1] < startingScore)
 		{
 			SetScore(startingScore, player);
 		}
@@ -104,20 +108,20 @@ public class GameManager : MonoBehaviour
 	{
 		if (!gameOver)
 		{
-			score[player] += amount;
-			if (score[player] < 0)
+			score[player-1] += amount;
+			if (score[player-1] < 0)
 			{
-				score[player] = 0;
+				score[player-1] = 0;
 			}
-			DisplayScore(player);
+			DisplayScore(player-1);
 		}
 
 	}
 
 	public void SetScore(int amount, int player)
 	{
-		score[player] = amount;
-		DisplayScore(player);
+		score[player-1] = amount;
+		DisplayScore(player-1);
 	}
 
 	public bool ReduceScore(int amount, int player)
@@ -192,7 +196,7 @@ public class GameManager : MonoBehaviour
 			CheckForHighScore(winners[0]);
 
 			gameOverPanel.GetComponent<Image>().color = winners[0].col;
-			winnerText= "Player " + (winners[0].playerNumber + 1) + " wins!\nFinal Score: " + score[winners[0].playerNumber];
+			winnerText= "Player " + (winners[0].playerNumber) + " wins!\nFinal Score: " + score[winners[0].playerNumber-1];
 		}
 		else
 		{// Tie
@@ -201,9 +205,9 @@ public class GameManager : MonoBehaviour
 			string multiWinnerText = "Players ";
 			for (int i = 0; i < winners.Count - 1; i++)
 			{
-				multiWinnerText += (winners[i].playerNumber + 1).ToString() + ", ";
+				multiWinnerText += (winners[i].playerNumber).ToString() + ", ";
 			}
-			multiWinnerText += (winners[winners.Count - 1].playerNumber + 1).ToString() + " Tied!";
+			multiWinnerText += (winners[winners.Count - 1].playerNumber).ToString() + " Tied!";
 			winnerText = multiWinnerText;
 		}
 		finalText.GetComponent<Text>().text = winnerText;
@@ -231,12 +235,12 @@ public class GameManager : MonoBehaviour
 			for (int i = 1; i < numberOfPlayers; i++)
 			{
 
-				if (score[i] > score[winners[0].playerNumber])
+				if (score[i] > score[winners[0].playerNumber-1])
 				{
 					winners.Clear();
 					winners.Add(roombas[i]);
 				}
-				else if (score[i] == score[winners[0].playerNumber])
+				else if (score[i] == score[winners[0].playerNumber-1])
 				{
 					if (roombas[i].balloonCount > winners[0].balloonCount)
 					{
@@ -255,37 +259,46 @@ public class GameManager : MonoBehaviour
 
 	public void CheckForHighScore(RoombaController rc)
 	{
-		int scorePlaceIndex=-1;
-		for(int i=0;i<PersistantHighScoreList.scoreList.Length;i++)
+		
+		if(rc !=null)
 		{
-			if(score[rc.playerNumber-1]>PersistantHighScoreList.scoreList[i].score)
+			int scorePlaceIndex = -1;
+			for (int i = 0; i < PersistantHighScoreList.scoreList.Length; i++)
 			{
-				scorePlaceIndex = i;
-				
+				if (score[rc.playerNumber - 1] > PersistantHighScoreList.scoreList[i].score)
+				{
+					scorePlaceIndex = i;
+
+				}
+				else
+				{
+					i = 100;
+				}
+			}
+
+			if (scorePlaceIndex != -1)
+			{// If there is a highscore change, Create new HighScore object and insert into high score array in proper place, then save scores.
+				highScorePosition = scorePlaceIndex;
+				highScorePanel.SetActive(true);
+				highScorePanel.GetComponent<Image>().color = rc.col;
+				hsPromptText.GetComponent<Text>().text = "Player " + (rc.playerNumber).ToString() + ", enter your initials!";
 			}
 			else
 			{
-				i = 100;
+				//Turn on gameOverPanel
+				gameOverPanel.SetActive(true);
 			}
-		}
-
-		if(scorePlaceIndex!=-1)
-		{// If there is a highscore change, Create new HighScore object and insert into high score array in proper place, then save scores.
-			highScorePosition = scorePlaceIndex;
-			highScorePanel.SetActive(true);
-			highScorePanel.GetComponent<Image>().color = rc.col;
-			hsPromptText.GetComponent<Text>().text = "Player " + (rc.playerNumber+1).ToString() + ", enter your initials!";
 		}
 		else
 		{
-			//Turn on gameOverPanel
 			gameOverPanel.SetActive(true);
 		}
+		
 	}
 
 	public void SaveHighScore(string initials)
 	{
-		HighScore highScore = new HighScore(initials, score[winner.playerNumber]);
+		HighScore highScore = new HighScore(initials, score[winner.playerNumber-1]);
 		//insert highscore into highScorePosition index of PersistantHighScoreList
 		for (int i = 0; i < highScorePosition; i++)
 		{

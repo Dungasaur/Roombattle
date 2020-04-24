@@ -238,10 +238,8 @@ public class RoombaController : MonoBehaviour
 	IEnumerator KeepMoving()
 	{
 		keepMoving = true;
-		Debug.Log(gameObject.name + "keepmoving = true");
 		yield return new WaitForSeconds(0.5f);
 		keepMoving = false;
-		Debug.Log(gameObject.name + "keepmoving = false");
 	}
 
 	//IEnumerator RotateDynamic(Vector3 position)
